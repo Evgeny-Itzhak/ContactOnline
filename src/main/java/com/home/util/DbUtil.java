@@ -23,7 +23,7 @@ public class DbUtil {
 
         try {
             Properties properties = new Properties();
-            InputStream inputStream = DbUtil.class.getClassLoader().getResourceAsStream("/src/db.properties");
+            InputStream inputStream = DbUtil.class.getClassLoader().getResourceAsStream("/resources/db.properties");
             properties.load(inputStream);
 
             String driver = properties.getProperty("driver");
