@@ -12,25 +12,25 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Itzhak-Miryam on 14.03.2016.
  */
-public class UserController extends HttpServlet {
+public class UserServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
     private static String INSERT_OR_EDIT = "/user.jsp";
     private static String LIST_USER = "/listUser.jsp";
+    private static String START_PAGE = "/index.jsp";
     private UserDao userDao;
 
-    public UserController() {
-        super();
+    public UserServlet() {
         userDao = new UserDao();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String forward = "";
+        String forward;
         String action = request.getParameter("action");
 
         if (action.equalsIgnoreCase("delete")) {
@@ -58,6 +58,7 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         User user = new User();
+        user.setUserId(Integer.parseInt(request.getParameter("userId")));
         user.setFirstName(request.getParameter("firstName"));
         user.setLastName(request.getParameter("lastName"));
         try {
@@ -69,7 +70,16 @@ public class UserController extends HttpServlet {
         user.setEmail(request.getParameter("email"));
         String userId = request.getParameter("userId");
 
-        if (userId == null || userId.isEmpty()) {
+        List<User> users = userDao.getAllUsers();
+        boolean userAlreadyIsInDb = false;
+
+        for (User userFromDb : users) {
+            if (userFromDb.getUserId() == user.getUserId()) {
+                userAlreadyIsInDb = true;
+            }
+        }
+
+        if (userId != null && !userAlreadyIsInDb) {
             userDao.addUser(user);
         } else {
             user.setUserId(Integer.parseInt(userId));
@@ -77,6 +87,7 @@ public class UserController extends HttpServlet {
         }
 
         RequestDispatcher view = request.getRequestDispatcher(LIST_USER);
+        request.setAttribute("users", userDao.getAllUsers());
         view.forward(request, response);
 
     }

@@ -20,12 +20,13 @@ public class UserDao {
 
     public void addUser(User user) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (firstname, lastname, dob, email) VALUES (?, ? ,? ,?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (userid, firstname, lastname, dob, email) VALUES (?, ?, ? ,? ,?)");
 
-            preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setString(2, user.getLastName());
-            preparedStatement.setString(3, String.valueOf(new java.sql.Date(user.getDob().getTime())));
-            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setString(1, String.valueOf(user.getUserId()));
+            preparedStatement.setString(2, user.getFirstName());
+            preparedStatement.setString(3, user.getLastName());
+            preparedStatement.setString(4, String.valueOf(new java.sql.Date(user.getDob().getTime())));
+            preparedStatement.setString(5, user.getEmail());
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -103,6 +104,5 @@ public class UserDao {
             e.printStackTrace();
         }
         return user;
-
     }
 }

@@ -8,10 +8,8 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
-        <description></description>
-        <display-name>UserController</display-name>
         <servlet-name>UserController</servlet-name>
-        <servlet-class>com.home.controller.UserController</servlet-class>
+        <servlet-class>com.home.controller.UserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
